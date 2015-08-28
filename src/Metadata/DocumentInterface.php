@@ -2,9 +2,8 @@
 
 namespace Eoko\ODM\DocumentManager\Metadata;
 
-
-interface DocumentInterface {
+interface DocumentInterface
+{
 
     public function getTable();
-
 }

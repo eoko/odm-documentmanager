@@ -8,13 +8,12 @@
 
 namespace Eoko\ODM\DocumentManager\Metadata;
 
-
-interface IdentifierInterface {
+interface IdentifierInterface
+{
 
     /**
      * Must return array with "fieldType" => "FieldValue"
      * @return array
      */
     public function getIdentifier();
-
 }

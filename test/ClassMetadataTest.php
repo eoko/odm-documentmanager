@@ -4,7 +4,6 @@ namespace Eoko\ODM\DocumentManager\Test;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Eoko\ODM\DocumentManager\Metadata\DocumentInterface;
-use Eoko\ODM\DocumentManager\Metadata\DriverInterface;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
 use Eoko\ODM\Metadata\Annotation\AnnotationDriver;

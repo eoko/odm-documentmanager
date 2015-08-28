@@ -2,8 +2,6 @@
 
 namespace Eoko\ODM\DocumentManager\Metadata;
 
-use Doctrine\Common\Annotations\Annotation;
-
 class ClassMetadata
 {
     /** @var   */
@@ -157,6 +155,6 @@ class ClassMetadata
                 }
             }
         }
-        return null;
+        return;
     }
 }
