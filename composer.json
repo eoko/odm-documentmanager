@@ -1,0 +1,46 @@
+{
+    "name": "eoko/odm/document-manager",
+    "description":"Simple Document manager that work fine with DynamoDB",
+    "keywords":["DynamoDB", "ODM", "Document Manager", "Document"],
+    "type":"library",
+    "license":"MIT",
+
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+
+    "authors":[
+        {
+            "name":"Romain DARY",
+            "email": "romain.dary@eoko.fr",
+            "homepage":"http://eoko.fr"
+        }
+    ],
+    "homepage": "https://github.com/eoko/odm",
+    "autoload": {
+        "psr-4": {
+            "Eoko\\ODM\\DocumentManager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Eoko\\ODM\\DocumentManager\\Test\\": "test/"
+        }
+    },
+
+    "require": {
+        "zendframework/zend-servicemanager": "^2.5@dev",
+        "zendframework/zend-eventmanager": "^2.5@dev",
+        "aws/aws-sdk-php": "~3.0@dev",
+        "doctrine/common": "~2.6@dev",
+        "zendframework/zend-filter": "~2.5@dev",
+        "zendframework/zend-cache": "~2.5@dev",
+        "cocur/slugify": "dev-master"
+    },
+
+    "require-dev": {
+        "satooshi/php-coveralls": "0.6.*",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "phpunit/phpunit": "^5.0@dev",
+        "mockery/mockery": "dev-master"
+    }
+}
