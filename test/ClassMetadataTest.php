@@ -3,10 +3,11 @@
 namespace Eoko\ODM\DocumentManager\Test;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Eoko\ODM\DocumentManager\Annotation\Document;
-use Eoko\ODM\DocumentManager\Metadata\AnnotationDriver;
+use Eoko\ODM\DocumentManager\Metadata\DocumentInterface;
+use Eoko\ODM\DocumentManager\Metadata\DriverInterface;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
+use Eoko\ODM\Metadata\Annotation\AnnotationDriver;
 use Zend\Cache\Storage\Adapter\Memory;
 
 class ClassMetadataTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +27,7 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetDocument()
     {
         $classMetadata = $this->getClassMetadata()->getDocument();
-        $this->assertInstanceOf(Document::class, $classMetadata);
+        $this->assertInstanceOf(DocumentInterface::class, $classMetadata);
     }
 
     public function testGetFieldNames()

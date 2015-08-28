@@ -3,9 +3,7 @@
 namespace Eoko\ODM\DocumentManager\Metadata;
 
 use Doctrine\Common\Annotations\Annotation;
-use Eoko\ODM\DocumentManager\Annotation\AbstractField;
-use Eoko\ODM\DocumentManager\Annotation\Document;
-use Eoko\ODM\DocumentManager\Annotation\KeySchemaInterface;
+use Eoko\ODM\Metadata\Annotation\DocumentInterface;
 
 class ClassMetadata
 {
@@ -24,7 +22,7 @@ class ClassMetadata
     /** @var array  */
     protected $identifiers = [];
 
-    /** @var AnnotationDriver */
+    /** @var DriverInterface */
     protected $driver;
 
     public function __construct($className, $driver)
@@ -52,7 +50,7 @@ class ClassMetadata
     }
 
     /**
-     * @return Document
+     * @return DocumentInterface
      * @throws \Exception
      */
     public function getDocument()
@@ -60,7 +58,7 @@ class ClassMetadata
         if (!isset($this->documentMetadata)) {
             $classMetadatas = $this->getClass();
             foreach ($classMetadatas as $classMetadata) {
-                if ($classMetadata instanceof Document) {
+                if ($classMetadata instanceof DocumentInterface) {
                     $this->documentMetadata = $classMetadata;
                 }
             }
@@ -84,15 +82,15 @@ class ClassMetadata
     /**
      * Gets the mapped identifier field name.
      * The returned structure is an array of the identifier field names.
-     * @return Annotation[]
+     * @return array
      */
     public function getIdentifier()
     {
         if (!$this->identifiers) {
             foreach ($this->getClass() as $item) {
-                if ($item instanceof KeySchemaInterface) {
+                if ($item instanceof IdentifierInterface) {
                     $this->identifiers = [];
-                    foreach ($item->getKeys() as $name => $fields) {
+                    foreach ($item->getIdentifier() as $name => $fields) {
                         $this->identifiers[$name] = ['type' => $this->getTypeOfField($name), 'name' => $name];
                     }
                 }
@@ -155,11 +153,11 @@ class ClassMetadata
         $fields = $this->getFields();
         if (isset($fields[$fieldName])) {
             foreach ($fields[$fieldName] as $field) {
-                if ($field instanceof AbstractField) {
-                    return $field->type;
+                if ($field instanceof FieldInterface) {
+                    return $field->getType();
                 }
             }
         }
-        return;
+        return null;
     }
 }
