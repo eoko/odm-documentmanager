@@ -7,6 +7,7 @@ use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 
 interface DriverInterface
 {
+    public function __construct($options);
 
     /**
      * @param array $values

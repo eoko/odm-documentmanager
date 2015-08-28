@@ -8,7 +8,6 @@ use Eoko\ODM\DocumentManager\Repository\DocumentManager;
 use Zend\Cache\Storage\Adapter\Memory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\Strategy\DateTimeFormatterStrategy;
 use Zend\Stdlib\Hydrator\StrategyEnabledInterface;
 
@@ -28,15 +27,18 @@ class DocumentManagerFactory implements FactoryInterface
 
         if (isset($baseConfig['eoko']['odm'])) {
             $base = $baseConfig['eoko']['odm'];
-            $connexionDriver = $serviceLocator->get($base['connexion']);
-            $cache = $serviceLocator->get($base['cache']);
+
+            $connexionDriver = $serviceLocator->get($base['driver']['name']);
+            $cache = new Memory();
             $metadataDriver = $serviceLocator->get($base['metadata']['driver']);
-            $hydratorClass = $base['eoko']['odm']['hydrator']['class'];
+
+
+            $hydratorClass = $base['hydrator']['class'];
 
             $hydrator = new $hydratorClass();
 
             if ($hydrator instanceof StrategyEnabledInterface) {
-                foreach ($base['eoko']['odm']['hydrator']['strategies'] as $name => $strategy) {
+                foreach ($base['hydrator']['strategies'] as $name => $strategy) {
                     if (is_object($strategy)) {
                         // Do nothing we are good :D
                     } elseif (is_callable($strategy)) {
