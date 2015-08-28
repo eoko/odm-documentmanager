@@ -3,7 +3,6 @@
 namespace Eoko\ODM\DocumentManager\Metadata;
 
 use Doctrine\Common\Annotations\Annotation;
-use Eoko\ODM\Metadata\Annotation\DocumentInterface;
 
 class ClassMetadata
 {
