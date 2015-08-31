@@ -4,7 +4,6 @@ namespace Eoko\ODM\DocumentManager\Repository;
 
 use Doctrine\Common\Collections\Criteria;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
-use Eoko\ODM\Metadata\Annotation\DateTime;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class DocumentRepository

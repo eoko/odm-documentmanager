@@ -5,7 +5,6 @@ namespace Eoko\ODM\DocumentManager\Repository;
 use Eoko\ODM\DocumentManager\Metadata\FieldInterface;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Eoko\ODM\DocumentManager\Driver\DynamoDBDriver;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Metadata\DriverInterface;
 
