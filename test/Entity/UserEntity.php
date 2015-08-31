@@ -2,11 +2,11 @@
 
 namespace Eoko\ODM\DocumentManager\Test\Entity;
 
-use Eoko\Metadata\Annotation\Document;
-use Eoko\Metadata\Annotation\String;
-use Eoko\Metadata\Annotation\DateTime;
-use Eoko\Metadata\Annotation\KeySchema;
-use Eoko\Metadata\Annotation\Boolean;
+use Eoko\ODM\Metadata\Annotation\Document;
+use Eoko\ODM\Metadata\Annotation\String;
+use Eoko\ODM\Metadata\Annotation\DateTime;
+use Eoko\ODM\Metadata\Annotation\KeySchema;
+use Eoko\ODM\Metadata\Annotation\Boolean;
 
 /**
  * @Document(table="oauth_users", provision={"ReadCapacityUnits" : 1, "WriteCapacityUnits" : 1})

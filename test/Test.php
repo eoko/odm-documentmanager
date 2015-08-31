@@ -27,65 +27,65 @@ class Test extends \PHPUnit_Framework_TestCase
 //        $classAnnotations = $annotationReader->getClassAnnotations($reflectionClass);
 //
 //        var_dump($classAnnotations);
-
-        $sdk = new Sdk([
-            'version' => 'latest',
-            'region' => 'eu-west-1',
-            'credentials' => [
-                'key' => 'AKIAJWBXWTRENZ4ZT6QQ',
-                'secret' => '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',
-            ],
-            'http' => [
-                'connect_timeout' => 1,
-            ],
-        ]);
-
-        $client = $sdk->createDynamoDb();
-
-
-        $entity = new UserEntity();
-        $entity->setUsername('test_55d0e150b75df');
-        $entity->setCreatedAt('za');
-        $annotationDriver = new AnnotationDriver(new AnnotationReader(), ['Eoko\ODM\DocumentManager' => __DIR__ . '/../src']);
-
-
-
-        $classMetadata = $annotationDriver->getClassMetadata($entity);
-        $fieldsMetadata = $annotationDriver->getFieldsMetadata($entity);
-
-
-        $hydrator = new ClassMethods();
-        $dStragegie = new DateTimeFormatterStrategy();
-
-
-        $strategies = [
-            'Eoko\ODM\DocumentManager\Annotation\DateTime' => $dStragegie
-        ];
-
-        $dynamoDBDriver = new DynamoDBDriver($client);
-        $em = new DocumentManager($annotationDriver, $dynamoDBDriver, $hydrator, $strategies);
-
-        $dynamoDBDriver->findBy(new Criteria(), 25, $em->getClassMetadata('Eoko\ODM\DocumentManager\Test\Entity\UserEntity'));
-
-      //  die(__CLASS__);
-
-
-        $metadata = $em->getClassMetadata('Eoko\ODM\DocumentManager\Test\Entity\UserEntity');
-        $repository = $em->getRepository('Eoko\ODM\DocumentManager\Test\Entity\UserEntity');
-
-        $entity->setUsername(uniqid('test_'));
-        $entity->setEmail('romain.dary@eoko.fr');
-        $entity->setCreatedAt(new \DateTime());
-        $add = $repository->add($entity);
-        $find = $repository->find($entity);
-        $findall = $repository->findAll();
-        $delete = $repository->delete($find);
-
-        $entity->setEmail('ooooooooooo');
-        $entity->setCreatedAt(null);
-        $entity->setEmailVerified(true);
-        $update = $repository->update($entity);
-        var_dump($add, $find, $findall, $delete, $update);
-        die;
+//
+//        $sdk = new Sdk([
+//            'version' => 'latest',
+//            'region' => 'eu-west-1',
+//            'credentials' => [
+//                'key' => 'XXXXXX',
+//                'secret' => 'XXXXX',
+//            ],
+//            'http' => [
+//                'connect_timeout' => 1,
+//            ],
+//        ]);
+//
+//        $client = $sdk->createDynamoDb();
+//
+//
+//        $entity = new UserEntity();
+//        $entity->setUsername('test_55d0e150b75df');
+//        $entity->setCreatedAt('za');
+//        $annotationDriver = new AnnotationDriver(new AnnotationReader(), ['Eoko\ODM\DocumentManager' => __DIR__ . '/../src']);
+//
+//
+//
+//        $classMetadata = $annotationDriver->getClassMetadata($entity);
+//        $fieldsMetadata = $annotationDriver->getFieldsMetadata($entity);
+//
+//
+//        $hydrator = new ClassMethods();
+//        $dStragegie = new DateTimeFormatterStrategy();
+//
+//
+//        $strategies = [
+//            'Eoko\ODM\DocumentManager\Annotation\DateTime' => $dStragegie
+//        ];
+//
+//        $dynamoDBDriver = new DynamoDBDriver($client);
+//        $em = new DocumentManager($annotationDriver, $dynamoDBDriver, $hydrator, $strategies);
+//
+//        $dynamoDBDriver->findBy(new Criteria(), 25, $em->getClassMetadata('Eoko\ODM\DocumentManager\Test\Entity\UserEntity'));
+//
+//      //  die(__CLASS__);
+//
+//
+//        $metadata = $em->getClassMetadata('Eoko\ODM\DocumentManager\Test\Entity\UserEntity');
+//        $repository = $em->getRepository('Eoko\ODM\DocumentManager\Test\Entity\UserEntity');
+//
+//        $entity->setUsername(uniqid('test_'));
+//        $entity->setEmail('romain.dary@eoko.fr');
+//        $entity->setCreatedAt(new \DateTime());
+//        $add = $repository->add($entity);
+//        $find = $repository->find($entity);
+//        $findall = $repository->findAll();
+//        $delete = $repository->delete($find);
+//
+//        $entity->setEmail('ooooooooooo');
+//        $entity->setCreatedAt(null);
+//        $entity->setEmailVerified(true);
+//        $update = $repository->update($entity);
+//        var_dump($add, $find, $findall, $delete, $update);
+//        die;
     }
 }

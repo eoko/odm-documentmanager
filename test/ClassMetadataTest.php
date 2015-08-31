@@ -7,7 +7,6 @@ use Eoko\ODM\DocumentManager\Metadata\DocumentInterface;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
 use Eoko\ODM\Metadata\Annotation\AnnotationDriver;
-use Zend\Cache\Storage\Adapter\Memory;
 
 class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,8 +76,8 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 
     private function getAnnotationDriver()
     {
-        $cache = new Memory();
-        return new AnnotationDriver(new AnnotationReader(), ['Eoko\ODM\DocumentManager' => __DIR__ . '/../src/'], $cache);
+        $options = ['autoload' => ['Eoko\ODM\Metadata\Annotation' => __DIR__ . '/../vendor/eoko/odm/metadata/annotation/src']];
+        return new AnnotationDriver($options);
     }
 
     private function getClassMetadata()
