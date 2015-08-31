@@ -36,6 +36,7 @@ class DocumentManagerFactory implements FactoryInterface
             $hydratorClass = $base['hydrator']['class'];
 
             $hydrator = new $hydratorClass();
+            $strategies = [];
 
             if ($hydrator instanceof StrategyEnabledInterface) {
                 foreach ($base['hydrator']['strategies'] as $name => $strategy) {
@@ -48,11 +49,11 @@ class DocumentManagerFactory implements FactoryInterface
                     } else {
                         throw new \Exception('This is not a valid strategy. Must be obj, callable or service managed.');
                     }
-                    $hydrator->addStrategy($name, $strategy);
+                    $strategies[$name] = $strategy;
                 }
             }
 
-            return new DocumentManager($metadataDriver, $connexionDriver, $hydrator, $cache);
+            return new DocumentManager($metadataDriver, $connexionDriver, $hydrator, $strategies, $cache);
         } else {
             throw new \Exception('Configuration Missing.');
         }

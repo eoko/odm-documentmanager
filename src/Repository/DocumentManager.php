@@ -2,6 +2,7 @@
 
 namespace Eoko\ODM\DocumentManager\Repository;
 
+use Eoko\ODM\DocumentManager\Metadata\FieldInterface;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Eoko\ODM\DocumentManager\Driver\DynamoDBDriver;
@@ -35,16 +36,20 @@ class DocumentManager
     /** @var  StorageInterface */
     protected $cache;
 
-    public function __construct($metadataDriver, $connexionDriver, $hydrator, $cache)
+    /** @var  [] */
+    protected $strategies;
+
+    public function __construct($metadataDriver, $connexionDriver, $hydrator, $strategies, $cache)
     {
         $this->metadataDriver = $metadataDriver;
         $this->connexionDriver = $connexionDriver;
         $this->hydrator = $hydrator;
+        $this->strategies = $strategies;
         $this->cache = $cache;
     }
 
     /**
-     * @return DynamoDBDriver
+     * @return \Eoko\ODM\Driver\DynamoDB\DynamoDBDriver
      */
     public function getConnexionDriver()
     {
@@ -69,6 +74,17 @@ class DocumentManager
     {
         if (!isset($this->repositories[$className])) {
             $classMetada = $this->getClassMetadata($className);
+            $hydrator = $this->getHydrator();
+            foreach ($classMetada->getFields() as $key => $fields) {
+                if (!is_null($fields)) {
+                    foreach ($fields as $field) {
+                        if ($field instanceof FieldInterface && isset($this->strategies[get_class($field)])) {
+                            $hydrator->addStrategy($field->getName(), $this->strategies[get_class($field)]);
+                        }
+                    }
+                }
+            }
+
             $hydrator = $this->getHydrator();
 
             $this->repositories[$className] = new DocumentRepository($this, $classMetada, $hydrator);
