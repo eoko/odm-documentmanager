@@ -2,9 +2,10 @@
 
 namespace Eoko\ODM\DocumentManager\Test;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Eoko\ODM\DocumentManager\Metadata\DocumentInterface;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
+use Eoko\ODM\DocumentManager\Metadata\DocumentInterface;
+use Eoko\ODM\DocumentManager\Metadata\FieldInterface;
+use Eoko\ODM\DocumentManager\Metadata\IdentifierInterface;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
 use Eoko\ODM\Metadata\Annotation\AnnotationDriver;
 
@@ -74,14 +75,45 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($isNot);
     }
 
-    private function getAnnotationDriver()
-    {
-        $options = ['autoload' => ['Eoko\ODM\Metadata\Annotation' => __DIR__ . '/../vendor/eoko/odm/metadata/annotation/src']];
-        return new AnnotationDriver($options);
-    }
-
     private function getClassMetadata()
     {
-        return new ClassMetadata(UserEntity::class, $this->getAnnotationDriver());
+        $usernameMetadata = \Mockery::mock(FieldInterface::class);
+        $usernameMetadata->shouldReceive('getType')->andReturn('string');
+        $usernameMetadata->shouldReceive('getValue')->andReturn('john');
+
+        $created_atMetadata = \Mockery::mock(FieldInterface::class);
+        $created_atMetadata->shouldReceive('getType')->andReturn('string');
+        $created_atMetadata->shouldReceive('getValue')->andReturn('john');
+
+        $emailMetadata = \Mockery::mock(FieldInterface::class);
+        $emailMetadata->shouldReceive('getType')->andReturn('string');
+        $emailMetadata->shouldReceive('getValue')->andReturn('john');
+
+        $email_verifiedMetadata = \Mockery::mock(FieldInterface::class);
+        $email_verifiedMetadata->shouldReceive('getType')->andReturn('string');
+        $email_verifiedMetadata->shouldReceive('getValue')->andReturn('john');
+
+        $documentMetadata = \Mockery::mock(DocumentInterface::class);
+        $documentMetadata->shouldReceive('getTable')->andReturn('table');
+
+        $identifierMetadata = \Mockery::mock(IdentifierInterface::class);
+        $identifierMetadata->shouldReceive('getIdentifier')->andReturn(['username' => '12']);
+
+        $classMetadata = [
+            'document' => $documentMetadata,
+            'identifiers' => $identifierMetadata
+        ];
+
+        $fieldMetadata = [
+            'username' => [ 'meta1' => $usernameMetadata ],
+            'created_at' => ['meta1' => $created_atMetadata],
+            'email' => ['meta1' => $emailMetadata],
+            'email_verified' => ['meta1' => $email_verifiedMetadata],
+        ];
+        $annotationDriver = \Mockery::mock(AnnotationDriver::class);
+        $annotationDriver->shouldReceive('getClassMetadata')->andReturn($classMetadata);
+        $annotationDriver->shouldReceive('getFieldsMetadata')->andReturn($fieldMetadata);
+
+        return new ClassMetadata(UserEntity::class, $annotationDriver);
     }
 }
