@@ -47,4 +47,16 @@ interface DriverInterface
      * @throws \Exception
      */
     public function deleteItem(array $values, ClassMetadata $classMetadata);
+
+    /**
+     * @param ClassMetadata $classMetadata
+     * @return null
+     */
+    public function createTable(ClassMetadata $classMetadata);
+
+    /**
+     * @param ClassMetadata $classMetadata
+     * @return null
+     */
+    public function deleteTable(ClassMetadata $classMetadata);
 }

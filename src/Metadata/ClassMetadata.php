@@ -88,7 +88,7 @@ class ClassMetadata
                 if ($item instanceof IdentifierInterface) {
                     $this->identifiers = [];
                     foreach ($item->getIdentifier() as $name => $fields) {
-                        $this->identifiers[$name] = ['type' => $this->getTypeOfField($name), 'name' => $name];
+                        $this->identifiers[$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
                     }
                 }
             }
@@ -155,6 +155,7 @@ class ClassMetadata
                 }
             }
         }
+
         return;
     }
 }

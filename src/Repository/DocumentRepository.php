@@ -91,7 +91,10 @@ class DocumentRepository
      */
     public function update($entity)
     {
-        $values = array_filter($this->_hydrator->extract($entity));
+        $values = array_filter($this->_hydrator->extract($entity), function($value) {
+            return !empty($value) || $value === 0;
+        });
+
         $result = $this->_em->getConnexionDriver()->updateItem($values, $this->_class);
         return $result ? true : false;
     }
@@ -136,6 +139,11 @@ class DocumentRepository
      */
     public function findBy(Criteria $criteria, $limit = null)
     {
-        return $this->_em->getConnexionDriver()->findBy($criteria, $limit, $this->_class);
+        $hydrator = $this->_hydrator;
+        $classname = $this->_class->getName();
+        $result = $this->_em->getConnexionDriver()->findBy($criteria, $limit, $this->_class);
+        return array_map(function ($item) use ($hydrator, $classname) {
+            return $hydrator->hydrate($item, new $classname());
+        }, $result);
     }
 }
