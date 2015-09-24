@@ -38,7 +38,7 @@ class DocumentManagerFactory implements FactoryInterface
             $hydrator = new $hydratorClass();
             $strategies = [];
 
-            if ($hydrator instanceof StrategyEnabledInterface) {
+            if ($hydrator instanceof StrategyEnabledInterface && isset($base['hydrator']['strategies'])) {
                 foreach ($base['hydrator']['strategies'] as $name => $strategy) {
                     if (is_object($strategy)) {
                         // Do nothing we are good :D
