@@ -5,6 +5,13 @@ return [
         'factories' => [
             'Eoko\\ODM\\DocumentManager' => 'Eoko\\ODM\\DocumentManager\\Factory\\DocumentManagerFactory'
         ]
-    ]
+    ],
+    'eoko' => [
+        'odm' => [
+            'hydrator' => [
+                'class' => 'Zend\Stdlib\Hydrator\ClassMethods',
+            ],
+        ],
+    ],
 
 ];
