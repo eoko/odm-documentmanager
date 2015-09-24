@@ -40,8 +40,7 @@
         "aws/aws-sdk-php": "~3.0@dev",
         "doctrine/common": "~2.6@dev",
         "zendframework/zend-filter": "~2.5@dev",
-        "zendframework/zend-cache": "~2.5@dev",
-        "cocur/slugify": "dev-master"
+        "zendframework/zend-cache": "~2.5@dev"
     },
 
     "require-dev": {
