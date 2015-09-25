@@ -19,6 +19,9 @@ class ClassMetadata
     /** @var array  */
     protected $identifiers = [];
 
+    /** @var array  */
+    protected $indexes = [];
+
     /** @var DriverInterface */
     protected $driver;
 
@@ -86,7 +89,6 @@ class ClassMetadata
         if (!$this->identifiers) {
             foreach ($this->getClass() as $item) {
                 if ($item instanceof IdentifierInterface) {
-                    $this->identifiers = [];
                     foreach ($item->getIdentifier() as $name => $fields) {
                         $this->identifiers[$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
                     }
@@ -94,6 +96,36 @@ class ClassMetadata
             }
         }
         return $this->identifiers;
+    }
+
+    protected function buildHash(array $keys) {
+        return implode(';', sort($keys));
+    }
+
+
+    public function isIndex(array $keys) {
+
+        if(empty($this->indexes)) {
+            $indexes = $this->getIndexes();
+        } else {
+            $indexes = $this->indexes;
+        }
+
+        return isset($indexes[$this->buildHash($keys)]) ? true : false;
+
+    }
+
+    public function getIndexes() {
+        if (!$this->indexes) {
+            foreach ($this->getClass() as $item) {
+                if ($item instanceof IndexInterface) {
+                    foreach ($item->getIndex() as $name => $fields) {
+                        $this->indexes[$item->getIndexName()][$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
+                    }
+                }
+            }
+        }
+        return $this->indexes;
     }
 
     /**
