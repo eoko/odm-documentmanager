@@ -7,7 +7,7 @@ interface IndexInterface
     /**
      * @return string
      */
-    public function getIndexName();
+    public function getName();
 
     /**
      * Must return array with fields
