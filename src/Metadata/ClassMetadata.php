@@ -22,6 +22,9 @@ class ClassMetadata
     /** @var array  */
     protected $indexes = [];
 
+    /** @var array  */
+    protected $indexed = [];
+
     /** @var DriverInterface */
     protected $driver;
 
@@ -57,9 +60,11 @@ class ClassMetadata
     {
         if (!isset($this->documentMetadata)) {
             $classMetadatas = $this->getClass();
-            foreach ($classMetadatas as $classMetadata) {
-                if ($classMetadata instanceof DocumentInterface) {
-                    $this->documentMetadata = $classMetadata;
+            foreach ($classMetadatas as $classMetadataList) {
+                foreach($classMetadataList as $classMetadata) {
+                    if ($classMetadata instanceof DocumentInterface) {
+                        $this->documentMetadata = $classMetadata;
+                    }
                 }
             }
         }
@@ -87,10 +92,12 @@ class ClassMetadata
     public function getIdentifier()
     {
         if (!$this->identifiers) {
-            foreach ($this->getClass() as $item) {
-                if ($item instanceof IdentifierInterface) {
-                    foreach ($item->getIdentifier() as $name => $fields) {
-                        $this->identifiers[$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
+            foreach ($this->getClass() as $items) {
+                foreach($items as $item) {
+                    if ($item instanceof IdentifierInterface) {
+                        foreach ($item->getIdentifier() as $name => $fields) {
+                            $this->identifiers[$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
+                        }
                     }
                 }
             }
@@ -99,9 +106,24 @@ class ClassMetadata
     }
 
     protected function buildHash(array $keys) {
-        return implode(';', sort($keys));
+        sort($keys);
+        return implode('---', $keys);
     }
 
+    public function isIndexed($fieldname) {
+        if(empty($this->indexed)) {
+            foreach ($this->getClass() as $items) {
+                foreach ($items as $key => $item) {
+                    if ($item instanceof IndexInterface) {
+                        foreach($item->getFields() as $key => $field) {
+                            $this->indexed[$key] = true;
+                        }
+                    }
+                }
+            }
+        }
+        return array_key_exists($fieldname, $this->indexed) ? true : false;
+    }
 
     public function isIndex(array $keys) {
 
@@ -115,12 +137,15 @@ class ClassMetadata
 
     }
 
+    /**
+     * @return IndexInterface[]
+     */
     public function getIndexes() {
         if (!$this->indexes) {
-            foreach ($this->getClass() as $item) {
-                if ($item instanceof IndexInterface) {
-                    foreach ($item->getIndex() as $name => $fields) {
-                        $this->indexes[$item->getIndexName()][$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
+            foreach ($this->getClass() as $items) {
+                foreach($items as $item) {
+                    if ($item instanceof IndexInterface) {
+                        $this->indexes[$this->buildHash($item->getFields())] = ['name' => $item->getName(), 'fields' => $item->getFields()];
                     }
                 }
             }

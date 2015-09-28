@@ -7,7 +7,6 @@ use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 
 interface DriverInterface
 {
-    public function __construct($options);
 
     /**
      * @param array $values
@@ -27,7 +26,7 @@ interface DriverInterface
 
     /**
      * @param ClassMetadata $classMetadata
-     * @return ArrayCollection
+     * @return array
      * @throws \Exception
      */
     public function findAll(ClassMetadata $classMetadata);

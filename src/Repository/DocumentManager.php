@@ -2,11 +2,12 @@
 
 namespace Eoko\ODM\DocumentManager\Repository;
 
+use Eoko\ODM\DocumentManager\Driver\DriverInterface;
 use Eoko\ODM\DocumentManager\Metadata\FieldInterface;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
-use Eoko\ODM\DocumentManager\Metadata\DriverInterface;
+use Eoko\ODM\DocumentManager\Metadata\DriverInterface as MetadataDriverInterface;
 
 class DocumentManager
 {
@@ -23,10 +24,10 @@ class DocumentManager
     /** @var  ClassMetadata */
     protected $classMetadata;
 
-    /** @var  DriverInterface */
+    /** @var  MetadataDriverInterface */
     protected $metadataDriver;
 
-    /** @var  \Eoko\ODM\DocumentManager\Driver\DriverInterface */
+    /** @var  DriverInterface */
     protected $connexionDriver;
 
     /** @var  HydratorInterface */
