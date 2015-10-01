@@ -29,16 +29,7 @@
       "Eoko\\ODM\\DocumentManager\\Test\\": "test/"
     }
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/eoko/odm-metadata-annotation"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/eoko/odm-driver-dynamodb"
-    }
-  ],
+  
   "require": {
     "zendframework/zend-servicemanager": "^2.5@dev",
     "zendframework/zend-eventmanager": "^2.5@dev",
