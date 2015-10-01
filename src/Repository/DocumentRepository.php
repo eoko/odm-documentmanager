@@ -44,14 +44,13 @@ class DocumentRepository
     /**
      * Finds an entity by its primary key / identifier.
      *
-     * @param mixed $entity
+     * @param array $keys
      * @return object
      * @throws \Exception
      */
-    public function find($entity)
+    public function find($keys)
     {
-        $values = $this->_hydrator->extract($entity);
-        $result = $this->_em->getConnexionDriver()->getItem($values, $this->_class);
+        $result = $this->_em->getConnexionDriver()->getItem($keys, $this->_class);
         $className = $this->_class->getName();
         return is_array($result) ? $this->_hydrator->hydrate($result, new $className()) : false;
     }
@@ -71,25 +70,31 @@ class DocumentRepository
         return $result ? true : false;
     }
 
+
+    function example() {
+        $repository = $this->_em->getRepository('MonEntity');
+        $repository->add(array('ke'));
+    }
+
     /**
-     * Add an entity.
+     * Add an entity. The newly created entity is return.
      *
      * @param $entity
-     * @return null
+     * @return array Identity keys
      * @throws \Exception
      */
     public function add($entity)
     {
         $values = $this->_hydrator->extract($entity);
-        $result = $this->_em->getConnexionDriver()->addItem($values, $this->_class);
-        return $result ? $entity : false;
+        $values = $this->_em->getConnexionDriver()->addItem($values, $this->_class);
+        return $this->_hydrator->hydrate($values, new $this->_entityName());
     }
 
     /**
      * @param $entity
      * @return bool
      */
-    public function update($entity)
+    public function update($array)
     {
         $values = array_filter($this->_hydrator->extract($entity), function($value) {
             return !empty($value) || $value === 0;
