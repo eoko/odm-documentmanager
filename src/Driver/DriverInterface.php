@@ -2,7 +2,6 @@
 
 namespace Eoko\ODM\DocumentManager\Driver;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 
 interface DriverInterface

@@ -4,25 +4,25 @@ namespace Eoko\ODM\DocumentManager\Metadata;
 
 class ClassMetadata
 {
-    /** @var   */
+    /** @var */
     protected $className;
 
-    /** @var   */
+    /** @var */
     protected $classMetadata;
 
-    /** @var   */
+    /** @var */
     protected $documentMetadata;
 
-    /** @var   */
+    /** @var */
     protected $fieldsMetadata;
 
-    /** @var array  */
+    /** @var array */
     protected $identifiers = [];
 
-    /** @var array  */
+    /** @var array */
     protected $indexes = [];
 
-    /** @var array  */
+    /** @var array */
     protected $indexed = [];
 
     /** @var DriverInterface */
@@ -61,7 +61,7 @@ class ClassMetadata
         if (!isset($this->documentMetadata)) {
             $classMetadatas = $this->getClass();
             foreach ($classMetadatas as $classMetadataList) {
-                foreach($classMetadataList as $classMetadata) {
+                foreach ($classMetadataList as $classMetadata) {
                     if ($classMetadata instanceof DocumentInterface) {
                         $this->documentMetadata = $classMetadata;
                     }
@@ -93,7 +93,7 @@ class ClassMetadata
     {
         if (!$this->identifiers) {
             foreach ($this->getClass() as $items) {
-                foreach($items as $item) {
+                foreach ($items as $item) {
                     if ($item instanceof IdentifierInterface) {
                         foreach ($item->getIdentifier() as $name => $fields) {
                             $this->identifiers[$name] = ['key' => $fields, 'type' => $this->getTypeOfField($name), 'name' => $name];
@@ -105,17 +105,19 @@ class ClassMetadata
         return $this->identifiers;
     }
 
-    protected function buildHash(array $keys) {
+    protected function buildHash(array $keys)
+    {
         sort($keys);
         return implode('---', $keys);
     }
 
-    public function isIndexed($fieldname) {
-        if(empty($this->indexed)) {
+    public function isIndexed($fieldname)
+    {
+        if (empty($this->indexed)) {
             foreach ($this->getClass() as $items) {
                 foreach ($items as $key => $item) {
                     if ($item instanceof IndexInterface) {
-                        foreach($item->getFields() as $key => $field) {
+                        foreach ($item->getFields() as $key => $field) {
                             $this->indexed[$key] = true;
                         }
                     }
@@ -125,30 +127,36 @@ class ClassMetadata
         return array_key_exists($fieldname, $this->indexed) ? true : false;
     }
 
-    public function isIndex(array $keys) {
+    public function hasIndex(array $values)
+    {
+        $keys = array_intersect($this->getIdentifierFieldNames(), array_keys($values));
+        return $this->isIndex($keys);
+    }
 
-        if(empty($this->indexes)) {
-            $indexes = $this->getIndexes();
-        } else {
-            $indexes = $this->indexes;
-        }
-
-        return isset($indexes[$this->buildHash($keys)]) ? true : false;
-
+    public function isIndex(array $keys)
+    {
+        return isset($this->getIndexes()[$this->buildHash($keys)]) ? true : false;
     }
 
     /**
      * @return IndexInterface[]
      */
-    public function getIndexes() {
+    public function getIndexes()
+    {
         if (!$this->indexes) {
             foreach ($this->getClass() as $items) {
-                foreach($items as $item) {
+                foreach ($items as $item) {
                     if ($item instanceof IndexInterface) {
-                        $this->indexes[$this->buildHash($item->getFields())] = ['name' => $item->getName(), 'fields' => $item->getFields()];
+                        $this->indexes[$this->buildHash(array_keys($item->getFields()))] = ['name' => $item->getName(), 'fields' => $item->getFields()];
                     }
                 }
             }
+
+            $fields = array_map(function ($field) {
+                return $field['key'];
+            }, $this->getIdentifier());
+
+            $this->indexes[$this->buildHash($this->getIdentifierFieldNames())] = ['name' => 'primary', 'fields' => $fields];
         }
         return $this->indexes;
     }
@@ -169,7 +177,7 @@ class ClassMetadata
      */
     public function getIdentifierFieldNames()
     {
-        return $this->getIdentifier();
+        return array_keys($this->getIdentifier());
     }
 
     /**

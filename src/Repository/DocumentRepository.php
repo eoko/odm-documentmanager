@@ -91,7 +91,7 @@ class DocumentRepository
      */
     public function update($entity)
     {
-        $values = array_filter($this->_hydrator->extract($entity), function($value) {
+        $values = array_filter($this->_hydrator->extract($entity), function ($value) {
             return !empty($value) || $value === 0;
         });
 
