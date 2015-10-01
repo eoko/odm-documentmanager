@@ -49,8 +49,8 @@
   },
   "require-dev": {
     "zendframework/zendframework": "^2.5@dev",
-    "eoko/odm/metadata/annotation": "dev-master",
-    "eoko/odm/driver/dynamo-db": "dev-master",
+    "eoko/odm-metadata-annotation": "dev-master",
+    "eoko/odm-driver-dynamo-db": "dev-master",
     "satooshi/php-coveralls": "0.6.*",
     "fabpot/php-cs-fixer": "1.7.*",
     "phpunit/phpunit": "~4.0",
