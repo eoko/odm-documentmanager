@@ -53,7 +53,7 @@ class RepositoryTest extends BaseTestCase
 
         $this->assertEquals($result, $expected);
     }
-    
+
 
     /**
      * @depends testAdd
