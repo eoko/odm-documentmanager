@@ -1,5 +1,5 @@
 {
-  "name": "eoko/odm/document-manager",
+  "name": "eoko/odm-documentmanager",
   "description": "Simple Document manager that work fine with DynamoDB",
   "keywords": [
     "DynamoDB",
