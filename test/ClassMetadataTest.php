@@ -25,7 +25,6 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDocument()
     {
-        var_dump($this->getClassMetadata());die;
         $classMetadata = $this->getClassMetadata()->getDocument();
         $this->assertInstanceOf(DocumentInterface::class, $classMetadata);
     }
@@ -78,7 +77,6 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 
     private function getClassMetadata()
     {
-        $annotationDriver = new AnnotationDriver();
-        return new ClassMetadata(UserEntity::class, $annotationDriver);
+        return new ClassMetadata(UserEntity::class, Bootstrap::getServiceManager()->get('Eoko\\ODM\\Metadata\\Annotation'));
     }
 }

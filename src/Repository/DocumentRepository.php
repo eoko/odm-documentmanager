@@ -44,13 +44,16 @@ class DocumentRepository
     /**
      * Finds an entity by its primary key / identifier.
      *
-     * @param array $keys
+     * @param array|object $keysOrEntity
      * @return object
      * @throws \Exception
      */
-    public function find($keys)
+    public function find($keysOrEntity)
     {
-        $result = $this->_em->getConnexionDriver()->getItem($keys, $this->_class);
+        if(is_object($keysOrEntity)) {
+            $keysOrEntity = $this->_hydrator->extract($keysOrEntity);
+        }
+        $result = $this->_em->getConnexionDriver()->getItem($keysOrEntity, $this->_class);
         $className = $this->_class->getName();
         return is_array($result) ? $this->_hydrator->hydrate($result, new $className()) : false;
     }
@@ -59,17 +62,18 @@ class DocumentRepository
     /**
      * Delete an entity by its primary key / identifier.
      *
-     * @param $entity
+     * @param array|object $keysOrEntity
      * @return bool
      * @throws \Exception
      */
-    public function delete($entity)
+    public function delete($keysOrEntity)
     {
-        $values = $this->_hydrator->extract($entity);
-        $result = $this->_em->getConnexionDriver()->deleteItem($values, $this->_class);
+        if(is_object($keysOrEntity)) {
+            $keysOrEntity = $this->_hydrator->extract($keysOrEntity);
+        }
+        $result = $this->_em->getConnexionDriver()->deleteItem($keysOrEntity, $this->_class);
         return $result ? true : false;
     }
-
 
     function example() {
         $repository = $this->_em->getRepository('MonEntity');
@@ -80,7 +84,7 @@ class DocumentRepository
      * Add an entity. The newly created entity is return.
      *
      * @param $entity
-     * @return array Identity keys
+     * @return object
      * @throws \Exception
      */
     public function add($entity)
@@ -129,24 +133,28 @@ class DocumentRepository
         return $this->_em->getConnexionDriver()->deleteTable($this->_class);
     }
 
-    public function getTable()
+    public function getStatusTable()
     {
-        return $this->_em->getConnexionDriver()->getTable($this->_class);
+        return $this->_em->getConnexionDriver()->getTableStatus($this->_class);
+    }
+
+    public function isTable()
+    {
+        return $this->_em->getConnexionDriver()->isTable($this->_class);
     }
 
     /**
      * Finds entities by a set of criteria.
      *
      * @param Criteria $criteria
-     * @param int|null $limit
      * @return array The objects.
      *
      */
-    public function findBy(Criteria $criteria, $limit = null)
+    public function findBy(Criteria $criteria)
     {
         $hydrator = $this->_hydrator;
         $classname = $this->_class->getName();
-        $result = $this->_em->getConnexionDriver()->findBy($criteria, $limit, $this->_class);
+        $result = $this->_em->getConnexionDriver()->findBy($criteria, $this->_class);
         return array_map(function ($item) use ($hydrator, $classname) {
             return $hydrator->hydrate($item, new $classname());
         }, $result);

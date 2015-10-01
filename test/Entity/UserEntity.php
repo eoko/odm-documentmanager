@@ -33,7 +33,7 @@ class UserEntity
     /**
      * @Boolean
      */
-    protected $email_verified = false;
+    protected $email_verified;
 
     /**
      * @return mixed

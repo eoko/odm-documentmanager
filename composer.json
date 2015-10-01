@@ -48,6 +48,7 @@
     "zendframework/zend-cache": "~2.5@dev"
   },
   "require-dev": {
+    "zendframework/zendframework": "^2.5@dev",
     "eoko/odm/metadata/annotation": "dev-master",
     "eoko/odm/driver/dynamo-db": "dev-master",
     "satooshi/php-coveralls": "0.6.*",
