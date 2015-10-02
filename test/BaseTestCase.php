@@ -58,8 +58,8 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         return $factory->createService($sm);
     }
 
-    public function getRepository()
+    public function getRepository($entity = UserEntity::class)
     {
-        return $this->getDocumentManager()->getRepository(UserEntity::class);
+        return $this->getDocumentManager()->getRepository($entity);
     }
 }

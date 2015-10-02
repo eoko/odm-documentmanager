@@ -16,12 +16,12 @@ interface DriverInterface
     public function addItem(array $values, ClassMetadata $classMetadata);
 
     /**
-     * @param array $values
+     * @param array $identifiers
      * @param ClassMetadata $classMetadata
      * @return array|null
      * @throws \Exception
      */
-    public function getItem(array $values, ClassMetadata $classMetadata);
+    public function getItem(array $identifiers, ClassMetadata $classMetadata);
 
     /**
      * @param ClassMetadata $classMetadata
@@ -36,7 +36,7 @@ interface DriverInterface
      * @return null
      * @throws \Exception
      */
-    public function updateItem(array $identifier, array $values, ClassMetadata $classMetadata);
+    public function updateItem(array $identifiers, array $values, ClassMetadata $classMetadata);
 
     /**
      * @param array $values
@@ -44,7 +44,7 @@ interface DriverInterface
      * @return null
      * @throws \Exception
      */
-    public function deleteItem(array $values, ClassMetadata $classMetadata);
+    public function deleteItem(array $identifiers, ClassMetadata $classMetadata);
 
     /**
      * @param ClassMetadata $classMetadata

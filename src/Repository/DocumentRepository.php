@@ -4,6 +4,8 @@ namespace Eoko\ODM\DocumentManager\Repository;
 
 use Doctrine\Common\Collections\Criteria;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
+use Zend\Filter\ToNull;
+use Zend\Stdlib\Hydrator\FilterEnabledInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class DocumentRepository
@@ -38,22 +40,38 @@ class DocumentRepository
         $this->_entityName = $class->getName();
         $this->_em = $entityManager;
         $this->_class = $class;
+
+        if ($hydrator instanceof FilterEnabledInterface) {
+            $hydrator->addFilter('null', new ToNull(\Zend\Filter\ToNull::TYPE_ALL));
+        }
+
         $this->_hydrator = $hydrator;
     }
 
     /**
-     * Finds an entity by its primary key / identifier.
+     * Finds an entity by its primary key / identifier that can be string, array or entity.
      *
-     * @param array|object $keysOrEntity
+     * If entity have multiple identifier, it's unsafe to use the string identifier.
+     *
+     * @param string|array|object $identifiers
      * @return object
      * @throws \Exception
      */
-    public function find($keysOrEntity)
+    public function find($identifiers)
     {
-        if (is_object($keysOrEntity)) {
-            $keysOrEntity = $this->_hydrator->extract($keysOrEntity);
+        if (is_object($identifiers)) {
+            $identifiers = $this->_hydrator->extract($identifiers);
         }
-        $result = $this->_em->getConnexionDriver()->getItem($keysOrEntity, $this->_class);
+
+        if (is_string($identifiers)) {
+            $field = $this->_class->getIdentifierFieldNames();
+            $identifiers = [$field[0] => $identifiers];
+        }
+
+        $classIdentifiers = $this->_class->getIdentifier();
+        $identifiers = array_intersect_key($identifiers, $classIdentifiers);
+
+        $result = $this->_em->getConnexionDriver()->getItem($identifiers, $this->_class);
         $className = $this->_class->getName();
         return is_array($result) ? $this->_hydrator->hydrate($result, new $className()) : false;
     }
@@ -62,16 +80,25 @@ class DocumentRepository
     /**
      * Delete an entity by its primary key / identifier.
      *
-     * @param array|object $keysOrEntity
+     * @param array|object $identifiers
      * @return bool
      * @throws \Exception
      */
-    public function delete($keysOrEntity)
+    public function delete($identifiers)
     {
-        if (is_object($keysOrEntity)) {
-            $keysOrEntity = $this->_hydrator->extract($keysOrEntity);
+        if (is_object($identifiers)) {
+            $identifiers = $this->_hydrator->extract($identifiers);
         }
-        $result = $this->_em->getConnexionDriver()->deleteItem($keysOrEntity, $this->_class);
+
+        if (is_string($identifiers)) {
+            $field = $this->_class->getIdentifierFieldNames();
+            $identifiers = [$field[0] => $identifiers];
+        }
+
+        $classIdentifiers = $this->_class->getIdentifier();
+        $identifiers = array_intersect_key($identifiers, $classIdentifiers);
+
+        $result = $this->_em->getConnexionDriver()->deleteItem($identifiers, $this->_class);
         return $result ? true : false;
     }
 
@@ -84,7 +111,8 @@ class DocumentRepository
      */
     public function add($entity)
     {
-        $values = $this->_hydrator->extract($entity);
+        $values = is_object($entity) ? $this->_hydrator->extract($entity) : $entity;
+        $values = array_intersect_key($values, $this->_class->getFields());
         $values = $this->_em->getConnexionDriver()->addItem($values, $this->_class);
         return $this->_hydrator->hydrate($values, new $this->_entityName());
     }
@@ -96,8 +124,11 @@ class DocumentRepository
      */
     public function update($values)
     {
-        $values = is_object($values) ? $this->_hydrator->extract($values) : $values;
-        $values = array_filter($values);
+        if (is_object($values)) {
+            $values = $this->_hydrator->extract($values);
+        }
+
+        $values = array_intersect_key($values, $this->_class->getFields());
 
         $identifier = $this->_class->getIdentifier();
         $identifiers = array_intersect_key($values, $identifier);

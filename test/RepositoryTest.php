@@ -25,9 +25,6 @@ class RepositoryTest extends BaseTestCase
         }
     }
 
-    /**
-     * @depends testCreateTable
-     */
     public function testAdd()
     {
         $entity = new UserEntity();
@@ -50,6 +47,7 @@ class RepositoryTest extends BaseTestCase
     }
 
     /**
+     * @depends testAdd
      */
     public function testUpdate()
     {
@@ -96,6 +94,17 @@ class RepositoryTest extends BaseTestCase
 
     /**
      * @depends testDelete
+     */
+    public function testCreateWithExtraValues()
+    {
+        $values = ['username' => 'me', 'date' => new \DateTime()];
+        $expected = $this->getRepository()->add($values);
+        $this->assertTrue($values != $this->getRepository()->find('me'));
+        $this->assertTrue($expected == $this->getRepository()->find('me'));
+    }
+
+    /**
+     * @depends testCreateWithExtraValues
      */
     public function testDeleteTable()
     {
