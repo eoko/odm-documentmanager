@@ -7,7 +7,6 @@ use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Repository\DocumentManager;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
 use Eoko\ODM\Driver\DynamoDB\DynamoDBDriver;
-use Eoko\ODM\Driver\DynamoDB\DynamoDBDriverFactory;
 use Zend\Config\Config;
 use Zend\Stdlib\Hydrator\Strategy\DateTimeFormatterStrategy;
 
@@ -35,8 +34,8 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return DocumentManager
      */
-    public function getDocumentManager() {
-
+    public function getDocumentManager()
+    {
         $factory = new DocumentManagerFactory();
 
         $sm = Bootstrap::getServiceManager();
@@ -59,7 +58,8 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
         return $factory->createService($sm);
     }
 
-    public function getRepository() {
+    public function getRepository()
+    {
         return $this->getDocumentManager()->getRepository(UserEntity::class);
     }
 }

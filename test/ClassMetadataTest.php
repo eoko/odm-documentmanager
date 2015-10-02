@@ -4,10 +4,7 @@ namespace Eoko\ODM\DocumentManager\Test;
 
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Metadata\DocumentInterface;
-use Eoko\ODM\DocumentManager\Metadata\FieldInterface;
-use Eoko\ODM\DocumentManager\Metadata\IdentifierInterface;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
-use Eoko\ODM\Metadata\Annotation\AnnotationDriver;
 
 class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 {

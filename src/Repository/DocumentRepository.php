@@ -90,10 +90,11 @@ class DocumentRepository
     }
 
     /**
-     * @param $entity
+     * @param object $values
      * @return bool
+     * @throws \Exception
      */
-    public function update($values = null)
+    public function update($values)
     {
         $values = is_object($values) ? $this->_hydrator->extract($values) : $values;
         $values = array_filter($values);
@@ -103,7 +104,7 @@ class DocumentRepository
 
         $result = $this->_em->getConnexionDriver()->updateItem($identifiers, $values, $this->_class);
 
-        if(!$result) {
+        if (!$result) {
             throw new \Exception('Something wrong.');
         }
 
@@ -118,28 +119,40 @@ class DocumentRepository
     public function findAll()
     {
         $hydrator = $this->_hydrator;
-        $classname = $this->_class->getName();
+        $className = $this->_class->getName();
         $result = $this->_em->getConnexionDriver()->findAll($this->_class);
-        return array_map(function ($item) use ($hydrator, $classname) {
-            return $hydrator->hydrate($item, new $classname());
+        return array_map(function ($item) use ($hydrator, $className) {
+            return $hydrator->hydrate($item, new $className());
         }, $result);
     }
 
+    /**
+     * @return null
+     */
     public function createTable()
     {
         return $this->_em->getConnexionDriver()->createTable($this->_class);
     }
 
+    /**
+     * @return null
+     */
     public function deleteTable()
     {
         return $this->_em->getConnexionDriver()->deleteTable($this->_class);
     }
 
+    /**
+     * @return false|string False if an error occured
+     */
     public function getStatusTable()
     {
         return $this->_em->getConnexionDriver()->getTableStatus($this->_class);
     }
 
+    /**
+     * @return bool
+     */
     public function isTable()
     {
         return $this->_em->getConnexionDriver()->isTable($this->_class);

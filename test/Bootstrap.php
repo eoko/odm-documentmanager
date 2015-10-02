@@ -88,7 +88,7 @@ class Bootstrap
             // Check the client is configure
             $dynamodbClient = $client->createDynamoDb();
         } catch (\InvalidArgumentException $e) {
-//            // If the client is not configure, we create a mock one
+            //            // If the client is not configure, we create a mock one
 //            $dynamodbClient = Mockery::mock(DynamoDbClient::class);
 //
 //            foreach ($mocks as $key => $item) {

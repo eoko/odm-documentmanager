@@ -8,15 +8,9 @@
 
 namespace Eoko\ODM\DocumentManager\Test;
 
-
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ExpressionBuilder;
-use Eoko\ODM\DocumentManager\Factory\DocumentManagerFactory;
-use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
-use Eoko\ODM\DocumentManager\Repository\DocumentManager;
-use Eoko\ODM\DocumentManager\Repository\DocumentRepository;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
-use Zend\Config\Config;
 
 class RepositoryTest extends BaseTestCase
 {
@@ -34,7 +28,8 @@ class RepositoryTest extends BaseTestCase
     /**
      * @depends testCreateTable
      */
-    public function testAdd() {
+    public function testAdd()
+    {
         $entity = new UserEntity();
         $entity->setUsername('john');
 
@@ -56,7 +51,8 @@ class RepositoryTest extends BaseTestCase
 
     /**
      */
-    public function testUpdate() {
+    public function testUpdate()
+    {
         $entity = new UserEntity();
         $entity->setUsername('john');
         $entity->setEmail('john@doe.com');
@@ -78,7 +74,8 @@ class RepositoryTest extends BaseTestCase
     /**
      * @depends testUpdate
      */
-    public function testFind() {
+    public function testFind()
+    {
         $criteria = new Criteria();
         $expression = new ExpressionBuilder();
 
@@ -91,7 +88,8 @@ class RepositoryTest extends BaseTestCase
     /**
      * @depends testFind
      */
-    public function testDelete() {
+    public function testDelete()
+    {
         $result = $this->getRepository()->delete(['username' => 'pierre']);
         $this->assertTrue($result);
     }
@@ -109,5 +107,4 @@ class RepositoryTest extends BaseTestCase
             sleep($retry++ * $retry);
         }
     }
-
 }

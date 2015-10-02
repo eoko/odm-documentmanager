@@ -8,13 +8,10 @@
 
 namespace Eoko\ODM\DocumentManager\Test;
 
-
-use Eoko\ODM\DocumentManager\Factory\DocumentManagerFactory;
 use Eoko\ODM\DocumentManager\Metadata\ClassMetadata;
 use Eoko\ODM\DocumentManager\Repository\DocumentManager;
 use Eoko\ODM\DocumentManager\Repository\DocumentRepository;
 use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
-use Zend\Config\Config;
 
 class FactoryTest extends BaseTestCase
 {
@@ -25,12 +22,14 @@ class FactoryTest extends BaseTestCase
         $this->assertInstanceOf(DocumentManager::class, $dm);
     }
 
-    public function testMetadata() {
+    public function testMetadata()
+    {
         $metadata = $this->getDocumentManager()->getClassMetadata(UserEntity::class);
         $this->assertInstanceOf(ClassMetadata::class, $metadata);
     }
 
-    public function testRepository() {
+    public function testRepository()
+    {
         $this->assertInstanceOf(DocumentRepository::class, $this->getRepository());
     }
 }
