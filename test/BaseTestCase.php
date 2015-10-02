@@ -9,6 +9,7 @@ use Eoko\ODM\DocumentManager\Test\Entity\UserEntity;
 use Eoko\ODM\Driver\DynamoDB\DynamoDBDriver;
 use Eoko\ODM\Driver\DynamoDB\DynamoDBDriverFactory;
 use Zend\Config\Config;
+use Zend\Stdlib\Hydrator\Strategy\DateTimeFormatterStrategy;
 
 /**
  * Class BaseTestCase
@@ -46,6 +47,9 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
                 'odm' => [
                     'hydrator' => [
                         'class' => 'Zend\Stdlib\Hydrator\ClassMethods',
+                        'strategies' => [
+                            'Eoko\ODM\Metadata\Annotation\DateTime' => new DateTimeFormatterStrategy(),
+                        ],
                     ],
                 ],
             ],

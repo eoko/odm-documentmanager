@@ -50,7 +50,7 @@ class DocumentRepository
      */
     public function find($keysOrEntity)
     {
-        if(is_object($keysOrEntity)) {
+        if (is_object($keysOrEntity)) {
             $keysOrEntity = $this->_hydrator->extract($keysOrEntity);
         }
         $result = $this->_em->getConnexionDriver()->getItem($keysOrEntity, $this->_class);
@@ -68,16 +68,11 @@ class DocumentRepository
      */
     public function delete($keysOrEntity)
     {
-        if(is_object($keysOrEntity)) {
+        if (is_object($keysOrEntity)) {
             $keysOrEntity = $this->_hydrator->extract($keysOrEntity);
         }
         $result = $this->_em->getConnexionDriver()->deleteItem($keysOrEntity, $this->_class);
         return $result ? true : false;
-    }
-
-    function example() {
-        $repository = $this->_em->getRepository('MonEntity');
-        $repository->add(array('ke'));
     }
 
     /**
@@ -98,14 +93,21 @@ class DocumentRepository
      * @param $entity
      * @return bool
      */
-    public function update($array)
+    public function update($values = null)
     {
-        $values = array_filter($this->_hydrator->extract($entity), function ($value) {
-            return !empty($value) || $value === 0;
-        });
+        $values = is_object($values) ? $this->_hydrator->extract($values) : $values;
+        $values = array_filter($values);
 
-        $result = $this->_em->getConnexionDriver()->updateItem($values, $this->_class);
-        return $result ? true : false;
+        $identifier = $this->_class->getIdentifier();
+        $identifiers = array_intersect_key($values, $identifier);
+
+        $result = $this->_em->getConnexionDriver()->updateItem($identifiers, $values, $this->_class);
+
+        if(!$result) {
+            throw new \Exception('Something wrong.');
+        }
+
+        return $this->_hydrator->hydrate($values, new $this->_entityName());
     }
 
     /**

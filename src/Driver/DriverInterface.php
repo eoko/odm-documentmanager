@@ -36,7 +36,7 @@ interface DriverInterface
      * @return null
      * @throws \Exception
      */
-    public function updateItem(array $values, ClassMetadata $classMetadata);
+    public function updateItem(array $identifier, array $values, ClassMetadata $classMetadata);
 
     /**
      * @param array $values

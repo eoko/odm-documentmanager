@@ -54,9 +54,29 @@ class RepositoryTest extends BaseTestCase
         $this->assertEquals($result, $expected);
     }
 
+    /**
+     */
+    public function testUpdate() {
+        $entity = new UserEntity();
+        $entity->setUsername('john');
+        $entity->setEmail('john@doe.com');
+
+        $expected = $this->getRepository()->update($entity);
+        $this->assertTrue($expected == $entity);
+
+        $result = $this->getRepository()->find(['username' => 'john']);
+        $this->assertTrue($result == $expected);
+
+        $entity->setEmailVerified(true);
+        $entity->setCreatedAt(new \DateTime());
+        $result = $this->getRepository()->update($entity);
+
+        $this->assertTrue($result == $entity);
+    }
+
 
     /**
-     * @depends testAdd
+     * @depends testUpdate
      */
     public function testFind() {
         $criteria = new Criteria();
@@ -89,6 +109,5 @@ class RepositoryTest extends BaseTestCase
             sleep($retry++ * $retry);
         }
     }
-
 
 }
