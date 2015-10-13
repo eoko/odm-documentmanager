@@ -105,7 +105,7 @@ class ClassMetadata
         return $this->identifiers;
     }
 
-    protected function buildHash(array $keys)
+    public function buildHash(array $keys)
     {
         sort($keys);
         return implode('---', $keys);
