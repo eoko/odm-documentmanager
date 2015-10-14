@@ -42,6 +42,8 @@ class DocumentManagerFactory implements FactoryInterface
                 foreach ($base['hydrator']['strategies'] as $name => $strategy) {
                     if (is_object($strategy)) {
                         // Do nothing we are good :D
+                    } elseif(class_exists($strategy)) {
+                        $strategy = new $strategy();
                     } elseif (is_callable($strategy)) {
                         $strategy = new $strategy();
                     } elseif ($serviceLocator->has($strategy)) {
