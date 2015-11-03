@@ -69,6 +69,7 @@ class DocumentRepository
         }
 
         $classIdentifiers = $this->_class->getIdentifier();
+
         $identifiers = array_intersect_key($identifiers, $classIdentifiers);
 
         $result = $this->_em->getConnexionDriver()->getItem($identifiers, $this->_class);
@@ -113,12 +114,13 @@ class DocumentRepository
     {
         $values = is_object($entity) ? $this->_hydrator->extract($entity) : $entity;
         $values = array_intersect_key($values, $this->_class->getFields());
+
         $values = $this->_em->getConnexionDriver()->addItem($values, $this->_class);
         return $this->_hydrator->hydrate($values, new $this->_entityName());
     }
 
     /**
-     * @param object $values
+     * @param object|array $values
      * @return bool
      * @throws \Exception
      */
