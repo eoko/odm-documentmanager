@@ -74,7 +74,7 @@ class DocumentRepository
 
         $result = $this->_em->getConnexionDriver()->getItem($identifiers, $this->_class);
         $className = $this->_class->getName();
-        return is_array($result) ? $this->_hydrator->hydrate($result, new $className()) : false;
+        return is_array($result) ? $this->_hydrator->hydrate($result, new $className()) : [];
     }
 
 
@@ -100,6 +100,10 @@ class DocumentRepository
         $identifiers = array_intersect_key($identifiers, $classIdentifiers);
 
         $result = $this->_em->getConnexionDriver()->deleteItem($identifiers, $this->_class);
+
+        if(!$result) {
+            throw new \Exception('Something wrong.');
+        }
         return $result ? true : false;
     }
 
@@ -113,9 +117,14 @@ class DocumentRepository
     public function add($entity)
     {
         $values = is_object($entity) ? $this->_hydrator->extract($entity) : $entity;
+
         $values = array_intersect_key($values, $this->_class->getFields());
 
         $values = $this->_em->getConnexionDriver()->addItem($values, $this->_class);
+
+        if(!$values) {
+            throw new \Exception('Something wrong.');
+        }
         return $this->_hydrator->hydrate($values, new $this->_entityName());
     }
 
@@ -131,6 +140,7 @@ class DocumentRepository
         }
 
         $values = array_intersect_key($values, $this->_class->getFields());
+
 
         $identifier = $this->_class->getIdentifier();
         $identifiers = array_intersect_key($values, $identifier);
